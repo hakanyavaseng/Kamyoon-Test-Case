@@ -33,7 +33,7 @@ public class ApiResponse<T> where T : class
     /// <returns></returns>
     public static ApiResponse<T> Success(T data, int statusCode)
     {
-        return new ApiResponse<T>() { Data = data, StatusCode = statusCode };
+        return new ApiResponse<T> { Data = data, StatusCode = statusCode };
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public class ApiResponse<T> where T : class
     /// <returns></returns>
     public static ApiResponse<T> Success(int statusCode)
     {
-        return new ApiResponse<T>() { Data = null, StatusCode = statusCode };
+        return new ApiResponse<T> { Data = null, StatusCode = statusCode };
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class ApiResponse<T> where T : class
     /// <returns></returns>
     public static ApiResponse<T> Fail(ErrorDto errorDto, int statusCode)
     {
-        return new ApiResponse<T>() { Error = errorDto, StatusCode = statusCode };
+        return new ApiResponse<T> { Error = errorDto, StatusCode = statusCode };
     }
 
     /// <summary>

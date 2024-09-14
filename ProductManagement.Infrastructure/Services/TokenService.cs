@@ -8,15 +8,16 @@ using Microsoft.IdentityModel.Tokens;
 using ProductManagement.Core.DTOs.Token;
 using ProductManagement.Core.Interfaces.Services;
 using ProductManagement.Domain.Entities;
+using TokenOptions = ProductManagement.Core.Options.TokenOptions;
 
 namespace ProductManagement.Infrastructure.Services;
 
 public class TokenService(
     UserManager<AppUser> userManager,
-    IOptions<Core.Options.TokenOptions> tokenOptions)
+    IOptions<TokenOptions> tokenOptions)
     : ITokenService
 {
-    private readonly Core.Options.TokenOptions _tokenOptions = tokenOptions.Value;
+    private readonly TokenOptions _tokenOptions = tokenOptions.Value;
     private readonly UserManager<AppUser> _userManager = userManager;
 
     public TokenResponseDto CreateToken(AppUser appUser)

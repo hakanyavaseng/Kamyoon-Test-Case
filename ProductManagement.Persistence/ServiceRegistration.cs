@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProductManagement.Core.Helpers;
 using ProductManagement.Core.Interfaces.Repositories;
 using ProductManagement.Core.Interfaces.Services;
 using ProductManagement.Core.Interfaces.UnitOfWork;
-using ProductManagement.Domain.Entities;
-using ProductManagement.Domain.Entities.Common;
 using ProductManagement.Persistence.Contexts;
 using ProductManagement.Persistence.Repositories;
 using ProductManagement.Persistence.Services;
@@ -24,7 +21,6 @@ public static class ServiceRegistration
         ConfigureAutoMapper(services);
         ConfigureUnitOfWork(services);
     }
-
 
 
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -51,7 +47,7 @@ public static class ServiceRegistration
     {
         services.AddAutoMapper(typeof(ServiceRegistration));
     }
-    
+
     public static void ConfigureUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();

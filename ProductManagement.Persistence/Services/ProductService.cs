@@ -20,7 +20,7 @@ public class ProductService : BaseService, IProductService
     }
 
     /// <summary>
-    /// Gets all products asynchronously
+    ///     Gets all products asynchronously
     /// </summary>
     /// <returns>List of products</returns>
     public async Task<ApiResponse<IEnumerable<ListProductDto>>> GetProductsAsync()
@@ -31,7 +31,7 @@ public class ProductService : BaseService, IProductService
     }
 
     /// <summary>
-    ///  Gets a product by id asynchronously
+    ///     Gets a product by id asynchronously
     /// </summary>
     /// <param name="id">Product id</param>
     /// <returns></returns>
@@ -43,7 +43,7 @@ public class ProductService : BaseService, IProductService
     }
 
     /// <summary>
-    /// Adds a product asynchronously
+    ///     Adds a product asynchronously
     /// </summary>
     /// <param name="product"></param>
     /// <returns></returns>
@@ -56,32 +56,32 @@ public class ProductService : BaseService, IProductService
     }
 
     /// <summary>
-    /// Updates a product asynchronously
+    ///     Updates a product asynchronously
     /// </summary>
     /// <param name="product"></param>
     /// <exception cref="Exception"></exception>
     public async Task<ApiResponse<NoContentDto>> UpdateProductAsync(UpdateProductDto product)
     {
         var existingProduct = await _readRepository.GetAsync(p => p.Id.Equals(product.Id), enableTracking: false);
-        if(existingProduct is null)
+        if (existingProduct is null)
             throw new Exception($"Product with id {product.Id} not found");
-        
+
         var mappedProduct = ObjectMapper.Map(product, existingProduct);
         await _writeRepository.UpdateAsync(mappedProduct);
         return ApiResponse<NoContentDto>.Success(StatusCodes.Status204NoContent);
     }
 
     /// <summary>
-    /// Deletes a product asynchronously
+    ///     Deletes a product asynchronously
     /// </summary>
     /// <param name="id"></param>
     /// <exception cref="Exception"></exception>
     public async Task<ApiResponse<NoContentDto>> DeleteProductAsync(Guid id)
     {
         var existingProduct = await _readRepository.GetAsync(p => p.Id.Equals(id), enableTracking: false);
-        if(existingProduct is null)
+        if (existingProduct is null)
             throw new Exception($"Product with id {id} not found");
-        
+
         await _writeRepository.DeleteAsync(existingProduct);
         return ApiResponse<NoContentDto>.Success(StatusCodes.Status204NoContent);
     }

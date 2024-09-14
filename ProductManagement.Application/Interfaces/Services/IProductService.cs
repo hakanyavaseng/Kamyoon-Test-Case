@@ -1,6 +1,5 @@
 ﻿using ProductManagement.Core.DTOs.ApiResponses;
 using ProductManagement.Core.DTOs.Product;
-using ProductManagement.Domain.Entities;
 
 namespace ProductManagement.Core.Interfaces.Services;
 

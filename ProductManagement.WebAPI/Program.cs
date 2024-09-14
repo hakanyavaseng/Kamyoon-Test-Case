@@ -17,7 +17,7 @@ builder.Services
 
 builder.Services.AddPersistenceLayerServices(builder.Configuration);
 builder.Services.AddInfrastructureLayer(builder.Configuration);
-builder.Services.AddAPIServices(builder.Configuration,builder.Host, builder);
+builder.Services.AddAPIServices(builder.Configuration, builder.Host, builder);
 
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();

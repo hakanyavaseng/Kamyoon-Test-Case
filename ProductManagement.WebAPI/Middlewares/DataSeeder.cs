@@ -16,11 +16,11 @@ public class DataSeeder
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             //Check if the database is created
             await dbContext.Database.EnsureCreatedAsync();
-            
+
             //Apply any pending migrations
             await dbContext.Database.MigrateAsync();
         }
-        
+
         using (var scope = serviceProvider.CreateScope())
         {
             var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
@@ -77,7 +77,6 @@ public class DataSeeder
                 await _userManager.CreateAsync(admin);
                 await _userManager.AddToRoleAsync(admin, RoleConsts.Admin);
             }
-
         }
     }
 }

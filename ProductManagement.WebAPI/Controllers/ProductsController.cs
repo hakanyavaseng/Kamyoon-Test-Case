@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProductManagement.Core.Attributes;
 using ProductManagement.Core.Consts;
 using ProductManagement.Core.DTOs.ApiResponses;
@@ -42,7 +41,8 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut]
-    [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Products, ActionType = ActionType.Updating, Definition = "Update Product")]
+    [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Products, ActionType = ActionType.Updating,
+        Definition = "Update Product")]
     public async Task<ApiResponse<NoContentDto>> Update(UpdateProductDto product)
     {
         var response = await _productService.UpdateProductAsync(product);
@@ -50,7 +50,8 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Products, ActionType = ActionType.Deleting, Definition = "Delete Product")]
+    [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Products, ActionType = ActionType.Deleting,
+        Definition = "Delete Product")]
     public async Task<ApiResponse<NoContentDto>> Delete(Guid id)
     {
         var response = await _productService.DeleteProductAsync(id);

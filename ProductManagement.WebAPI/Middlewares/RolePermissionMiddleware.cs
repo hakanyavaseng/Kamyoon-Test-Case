@@ -1,11 +1,8 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using ProductManagement.Core.Attributes;
 using ProductManagement.Core.Consts;
 using ProductManagement.Core.Enums;
 using ProductManagement.Domain.Entities;
-using ProductManagement.Persistence.Contexts;
 
 namespace ProductManagement.WebAPI.Middlewares;
 
@@ -29,7 +26,7 @@ public class RolePermissionMiddleware : IMiddleware
 
             if (endpoint is not null)
             {
-                bool isAuthEndpoint = endpoint.Metadata.Any(m => m is AuthorizeDefinitionAttribute);
+                var isAuthEndpoint = endpoint.Metadata.Any(m => m is AuthorizeDefinitionAttribute);
                 if (!isAuthEndpoint)
                 {
                     await next(context);
@@ -56,11 +53,9 @@ public class RolePermissionMiddleware : IMiddleware
                         await next(context);
                         return;
                     }
-                    else
-                    {
-                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                        return;
-                    }
+
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return;
                 }
             }
 

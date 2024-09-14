@@ -7,6 +7,7 @@ namespace ProductManagement.Persistence.Repositories;
 public class RepositoryManager : IRepositoryManager
 {
     private readonly AppDbContext context;
+
     public RepositoryManager(AppDbContext context)
     {
         this.context = context;
@@ -14,9 +15,16 @@ public class RepositoryManager : IRepositoryManager
 
     public DbContext DbContext => context;
 
-    public void Dispose() => context.Dispose();
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();
-    public int Save() => context.SaveChanges();
+    public void Dispose()
+    {
+        context.Dispose();
+    }
+
+    public int Save()
+    {
+        return context.SaveChanges();
+    }
+
     public async Task<int> SaveAsync()
     {
         using (var transaction = await context.Database.BeginTransactionAsync())
@@ -34,7 +42,19 @@ public class RepositoryManager : IRepositoryManager
             }
         }
     }
-    IReadRepository<T> IRepositoryManager.GetReadRepository<T>() => new ReadRepository<T>(context);
-    IWriteRepository<T> IRepositoryManager.GetWriteRepository<T>() => new WriteRepository<T>(context);
 
+    IReadRepository<T> IRepositoryManager.GetReadRepository<T>()
+    {
+        return new ReadRepository<T>(context);
+    }
+
+    IWriteRepository<T> IRepositoryManager.GetWriteRepository<T>()
+    {
+        return new WriteRepository<T>(context);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await context.DisposeAsync();
+    }
 }

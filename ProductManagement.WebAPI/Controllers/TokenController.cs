@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ProductManagement.Core.Consts;
 using ProductManagement.Core.DTOs.ApiResponses;
 using ProductManagement.Core.DTOs.Token;
 using ProductManagement.Core.Interfaces.Services;
@@ -13,10 +12,10 @@ namespace ProductManagement.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class TokenController : ControllerBase
 {
+    private readonly ILogger _logger;
     private readonly ITokenService _tokenService;
     private readonly UserManager<AppUser> _userManager;
-    private readonly ILogger _logger;
-    
+
 
     public TokenController(ITokenService tokenService, UserManager<AppUser> userManager, ILogger logger)
     {

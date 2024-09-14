@@ -6,22 +6,21 @@ using ProductManagement.Domain.Entities.Common;
 
 namespace ProductManagement.Persistence.Contexts;
 
-public class AppDbContext : IdentityDbContext<AppUser,AppRole,Guid>
+public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid>
 {
-    public DbSet<Product> Products { get; set; }
-    
-    
-    
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
 
+    public DbSet<Product> Products { get; set; }
+
     //TODO : Current user id should be taken from http context
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         var entries = ChangeTracker.Entries()
-            .Where(e => e.Entity is BaseEntity && 
-                        (e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted));
+            .Where(e => e.Entity is BaseEntity &&
+                        (e.State == EntityState.Added || e.State == EntityState.Modified ||
+                         e.State == EntityState.Deleted));
 
         foreach (var entry in entries)
         {
@@ -29,19 +28,20 @@ public class AppDbContext : IdentityDbContext<AppUser,AppRole,Guid>
             {
                 creationAuditedEntity.Id = Guid.NewGuid();
                 creationAuditedEntity.CreatedDate = DateTime.UtcNow;
-                creationAuditedEntity.CreatedBy = Guid.NewGuid(); 
+                creationAuditedEntity.CreatedBy = Guid.NewGuid();
             }
 
-            if (entry.Entity is ModificationAuditedEntity<Guid> modificationAuditedEntity && entry.State == EntityState.Modified)
+            if (entry.Entity is ModificationAuditedEntity<Guid> modificationAuditedEntity &&
+                entry.State == EntityState.Modified)
             {
                 modificationAuditedEntity.LastModifiedDate = DateTime.UtcNow;
-                modificationAuditedEntity.LastModifiedBy = "system"; 
+                modificationAuditedEntity.LastModifiedBy = "system";
             }
 
             if (entry.Entity is FullAuditedEntity<Guid> fullAuditedEntity && entry.State == EntityState.Deleted)
             {
                 fullAuditedEntity.DeletedDate = DateTime.UtcNow;
-                fullAuditedEntity.DeletedBy = "system"; 
+                fullAuditedEntity.DeletedBy = "system";
                 fullAuditedEntity.IsDeleted = true;
 
                 entry.State = EntityState.Modified;
@@ -50,7 +50,7 @@ public class AppDbContext : IdentityDbContext<AppUser,AppRole,Guid>
 
         return await base.SaveChangesAsync(cancellationToken);
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

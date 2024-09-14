@@ -17,7 +17,10 @@ public class ReadRepository<T> : IReadRepository<T> where T : CreationAuditedEnt
 
     protected DbSet<T> Table => dbContext.Set<T>();
 
-    public IQueryable<T> AsQueryable() => Table.AsQueryable();
+    public IQueryable<T> AsQueryable()
+    {
+        return Table.AsQueryable();
+    }
 
     public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,

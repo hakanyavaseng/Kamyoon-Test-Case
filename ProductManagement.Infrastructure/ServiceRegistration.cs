@@ -10,8 +10,5 @@ public static class ServiceRegistration
     public static void AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ITokenService, TokenService>();
-        
     }
-    
-    
 }

@@ -10,7 +10,6 @@ using ProductManagement.Domain.Entities;
 using ProductManagement.Domain.Entities.Common;
 using ProductManagement.Persistence.Contexts;
 using Serilog;
-using Serilog.Core;
 using Serilog.Sinks.MSSqlServer;
 
 namespace ProductManagement.WebAPI;
@@ -30,7 +29,7 @@ public static class ServiceRegistration
     {
         services.Configure<TokenOptions>(builder.Configuration.GetSection("TokenOptions"));
 
-        Core.Options.TokenOptions? tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<Core.Options.TokenOptions>();
+        var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<Core.Options.TokenOptions>();
 
         builder.Services.AddAuthentication(options =>
         {
@@ -49,12 +48,10 @@ public static class ServiceRegistration
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey))
             };
         });
-
     }
-    
+
     public static void ConfigureServiceLocator(this IServiceCollection services)
     {
-        
         var serviceProvider = services.BuildServiceProvider();
         ServiceLocator.Initialize(serviceProvider);
     }
@@ -78,16 +75,16 @@ public static class ServiceRegistration
     public static void ConfigureLoggerService(this IServiceCollection services, IConfiguration configuration,
         IHostBuilder builder)
     {
-        var columOptions = new ColumnOptions()
+        var columOptions = new ColumnOptions
         {
             AdditionalColumns = new Collection<SqlColumn>
             {
-                new SqlColumn { ColumnName = "RemoteIpAddress", DataType = SqlDbType.NVarChar, DataLength = 50 },
-                new SqlColumn { ColumnName = "UserId", DataType = SqlDbType.NVarChar, DataLength = 200 }
+                new() { ColumnName = "RemoteIpAddress", DataType = SqlDbType.NVarChar, DataLength = 50 },
+                new() { ColumnName = "UserId", DataType = SqlDbType.NVarChar, DataLength = 200 }
             }
         };
 
-        Logger logConfig = new LoggerConfiguration()
+        var logConfig = new LoggerConfiguration()
             .WriteTo.Console()
             .WriteTo.MSSqlServer(configuration.GetConnectionString("DefaultConnection"), "Logs",
                 autoCreateSqlTable: true,

@@ -7,7 +7,7 @@ namespace ProductManagement.Persistence.Repositories;
 
 public class WriteRepository<T> : IWriteRepository<T> where T : CreationAuditedEntity<Guid>
 {
-    readonly DbContext context;
+    private readonly DbContext context;
 
     public WriteRepository(DbContext context)
     {
@@ -49,14 +49,14 @@ public class WriteRepository<T> : IWriteRepository<T> where T : CreationAuditedE
         Table.Remove(entity);
     }
 
+    public virtual async Task DeleteAsync(Expression<Func<T, bool>> predicate)
+    {
+        context.RemoveRange(Table.Where(predicate));
+    }
+
     public virtual async Task DeleteAsync(Guid id)
     {
         var entity = await Table.FindAsync(id);
         await DeleteAsync(entity);
-    }
-
-    public virtual async Task DeleteAsync(Expression<Func<T, bool>> predicate)
-    {
-        context.RemoveRange(Table.Where(predicate));
     }
 }
