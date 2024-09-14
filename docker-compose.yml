@@ -1,0 +1,40 @@
+﻿services:
+  c_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    restart: always
+    depends_on:
+      - c_mssql
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+      - ConnectionStrings__DefaultConnection=Server=c_mssql,1433;Database=ProductManagementDb;User Id=sa;Password=123456Sql!;TrustServerCertificate=True;
+      - TokenOptions__Issuer=localhost
+      - TokenOptions__Audience=localhost
+      - TokenOptions__AccessTokenExpirationAsHour=26
+      - TokenOptions__RefreshTokenExpirationAsHour=48
+      - TokenOptions__SecurityKey=!vepvi-)9hoqvhnboqcf$mxos=*p$y$czo$@m5w1^e@(nxjg3@
+    networks:
+      - c_network
+
+  c_mssql:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1433:1433"
+    restart: always
+    environment:
+      SA_PASSWORD: "123456Sql!"
+      ACCEPT_EULA: Y
+    volumes:
+      - ./mssql:/var/opt/mssql
+    networks:
+      - c_network
+
+networks:
+  c_network:
+    driver: bridge
