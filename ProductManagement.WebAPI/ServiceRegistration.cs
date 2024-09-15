@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ProductManagement.Core.Helpers;
 using ProductManagement.Domain.Entities;
@@ -19,7 +20,6 @@ public static class ServiceRegistration
     public static void AddAPIServices(this IServiceCollection services, IConfiguration configuration,
         IHostBuilder builder, WebApplicationBuilder webApplicationBuilder)
     {
-        ConfigureLoggerService(services, configuration, builder);
         ConfigureIdentity(services);
         ConfigureServiceLocator(services);
         ConfigureAuthentication(services, webApplicationBuilder);
@@ -70,38 +70,5 @@ public static class ServiceRegistration
             .AddRoles<AppRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-    }
-
-    public static void ConfigureLoggerService(this IServiceCollection services, IConfiguration configuration,
-        IHostBuilder builder)
-    {
-        var columOptions = new ColumnOptions
-        {
-            AdditionalColumns = new Collection<SqlColumn>
-            {
-                new() { ColumnName = "RemoteIpAddress", DataType = SqlDbType.NVarChar, DataLength = 50 },
-                new() { ColumnName = "UserId", DataType = SqlDbType.NVarChar, DataLength = 200 }
-            }
-        };
-
-        var logConfig = new LoggerConfiguration()
-            .WriteTo.Console()
-            .WriteTo.MSSqlServer(configuration.GetConnectionString("DefaultConnection"), "Logs",
-                autoCreateSqlTable: true,
-                columnOptions: columOptions)
-            .MinimumLevel.Warning()
-            .Enrich.FromLogContext()
-            .CreateLogger();
-
-        builder.UseSerilog(logConfig);
-
-        services.AddHttpLogging(logging =>
-        {
-            logging.LoggingFields = HttpLoggingFields.All;
-            logging.RequestHeaders.Add("sec-ch-ua");
-            logging.MediaTypeOptions.AddText("application/javascript");
-            logging.RequestBodyLogLimit = 4096;
-            logging.ResponseBodyLogLimit = 4096;
-        });
     }
 }

@@ -14,8 +14,6 @@ public class DataSeeder
         using (var scope = serviceProvider.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            //Check if the database is created
-            await dbContext.Database.EnsureCreatedAsync();
 
             //Apply any pending migrations
             await dbContext.Database.MigrateAsync();

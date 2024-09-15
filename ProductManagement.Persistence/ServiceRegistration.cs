@@ -15,22 +15,12 @@ public static class ServiceRegistration
 {
     public static void AddPersistenceLayerServices(this IServiceCollection services, IConfiguration configuration)
     {
-        ConfigureDbContext(services, configuration);
         ConfigureRepositories(services);
         ConfigureServices(services, configuration);
         ConfigureAutoMapper(services);
         ConfigureUnitOfWork(services);
     }
-
-
-    public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddDbContext<AppDbContext>(options =>
-        {
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-        });
-    }
-
+    
     public static void ConfigureRepositories(this IServiceCollection services)
     {
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
