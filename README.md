@@ -29,7 +29,7 @@ To run the .NET Core Web API application using Docker Compose, follow these step
 ### Prerequisites
 
 - Ensure Docker and Docker Compose are installed on your system. You can download and install Docker Desktop from [Docker's official site](https://www.docker.com/products/docker-desktop).
-- 
+  
 ### Steps to Run the Application
 
 1. **Clone the Repository:**
