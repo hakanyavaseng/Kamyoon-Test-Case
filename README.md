@@ -39,11 +39,10 @@ To run the .NET Core Web API application using Docker Compose, follow these step
    cd Kamyoon-Test-Case
 2. **Build and Run with Docker Compose:**
 
-    Navigate to the directory containing your docker-compose.yml file (if it's in the root of the project, you are already in the correct directory).
+    Navigate to the directory containing docker-compose.yml file (if it's in the root of the project, you are already in the correct directory).
 
 >  docker-compose up --build      docker-compose up --build
   
- This command builds the Docker images and starts the containers as defined in your docker-compose.yml file.
 
 3. **Access the Application:**
 
