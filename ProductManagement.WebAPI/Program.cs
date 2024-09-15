@@ -2,8 +2,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
-using Polly;
-using ProductManagement.Core.Consts;
+using ProductManagement.Core.Options;
 using ProductManagement.Infrastructure;
 using ProductManagement.Persistence;
 using ProductManagement.Persistence.Contexts;
@@ -11,6 +10,7 @@ using ProductManagement.WebAPI;
 using ProductManagement.WebAPI.Filters;
 using ProductManagement.WebAPI.Middlewares;
 using Serilog;
+using Serilog.Core;
 using Serilog.Sinks.MSSqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,14 +24,10 @@ builder.Services
         c.Filters.Add<ValidationFilter>();
     });
 
-
+builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection("TokenOptions"));
 var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
                        ?? builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
-
+builder.Services.AddDbContext<AppDbContext>(options => { options.UseSqlServer(connectionString); });
 
 builder.Services.AddPersistenceLayerServices(builder.Configuration);
 builder.Services.AddInfrastructureLayer(builder.Configuration);
