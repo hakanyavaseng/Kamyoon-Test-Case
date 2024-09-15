@@ -1,0 +1,28 @@
+﻿version: '3.8'
+
+services:
+  c_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    restart: always
+    depends_on:
+      - c_mssql
+    environment:
+      - TokenOptions__Issuer=localhost
+      - TokenOptions__Audience=localhost
+      - TokenOptions__AccessTokenExpirationAsHour=26
+      - TokenOptions__RefreshTokenExpirationAsHour=48
+      - TokenOptions__SecurityKey=!vepvi-)9hoqvhnboqcf$mxos=*p$y$czo$@m5w1^e@(nxjg3@
+  
+  c_mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=123456Sql!
